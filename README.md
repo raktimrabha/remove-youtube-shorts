@@ -14,12 +14,12 @@ By subscribing, your AdGuard will automatically fetch any future updates I make 
 1. Open AdGuard settings.
 2. Go to **Filters** > **Custom Filters** (or **Add Custom Filter**).
 3. Paste the raw URL of the text file:
-   `https://raw.githubusercontent.com/[YOUR-USERNAME]/[YOUR-REPO-NAME]/main/youtube-shorts-blocker.txt`
+   `https://raw.githubusercontent.com/raktimrabha/remove-youtube-shorts/main/remove-yt-shorts-filters.txt`
 
 ### Option B: Manual Copy-Paste
 1. Open AdGuard settings.
 2. Go to **User Rules**.
-3. Copy the contents of `youtube-shorts-blocker.txt` and paste them into the box.
+3. Copy the contents of `remove-yt-shorts-filters.txt` and paste them into the box.
 4. Click Apply/Save.
 
 ## 🛠 Why Old Rules Broke (Technical Details)

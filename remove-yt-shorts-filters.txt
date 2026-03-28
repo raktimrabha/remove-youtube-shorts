@@ -1,0 +1,26 @@
+! Title: Block YouTube Shorts
+! Description: AdGuard filters to completely remove YouTube Shorts from the desktop web interface.
+! Homepage: [https://github.com/raktimrabha/remove-youtube-shorts]
+
+! 1. Hide Shorts sections on Homepage and Subscriptions
+youtube.com##[is-shorts]
+youtube.com##ytd-rich-section-renderer:has(a[href^="/shorts/"])
+
+! 2. Hide the Shorts button in the main and mini side menus
+youtube.com###guide [title="Shorts"]
+youtube.com##.ytd-mini-guide-entry-renderer[title="Shorts"]
+youtube.com##ytd-mini-guide-entry-renderer[aria-label="Shorts"]
+
+! 3. Hide Shorts carousels (Search, Sidebar, Channels)
+youtube.com##ytd-reel-shelf-renderer
+
+! 4. Hide individual Shorts in Search and Grid Views
+youtube.com##ytd-video-renderer:has(a[href*="/shorts/"])
+youtube.com##ytd-grid-video-renderer:has(a[href*="/shorts/"])
+youtube.com##ytd-rich-item-renderer:has(a[href*="/shorts/"])
+
+! 5. Hide the Shorts tab on Channel pages
+youtube.com##tp-yt-paper-tab[aria-label="Shorts"]
+
+! 6. Hide Shorts in the right sidebar (Related videos)
+youtube.com##ytd-compact-video-renderer:has(a[href*="/shorts/"])
