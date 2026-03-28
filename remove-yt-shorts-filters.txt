@@ -2,25 +2,44 @@
 ! Description: AdGuard filters to completely remove YouTube Shorts from the desktop web interface.
 ! Homepage: [https://github.com/raktimrabha/remove-youtube-shorts]
 
-! 1. Hide Shorts sections on Homepage and Subscriptions
+! --- 1. Layout & Grid Fixes ---
+! Fix empty spaces left behind by blocked grids
+www.youtube.com##ytd-rich-grid-row,#contents.ytd-rich-grid-row:style(display: contents !important)
+
+! --- 2. Hide Shelves & Sections (Updated for March 2026) ---
+! Hide dedicated Shorts shelves (using custom attribute)
 youtube.com##[is-shorts]
-youtube.com##ytd-rich-section-renderer:has(a[href^="/shorts/"])
+! Hide Shorts sections everywhere except History
+www.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytd-rich-section-renderer:has(a[href^="/shorts/"])
+www.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytd-reel-shelf-renderer:has(a[href^="/shorts/"])
 
-! 2. Hide the Shorts button in the main and mini side menus
-youtube.com###guide [title="Shorts"]
-youtube.com##.ytd-mini-guide-entry-renderer[title="Shorts"]
-youtube.com##ytd-mini-guide-entry-renderer[aria-label="Shorts"]
-
-! 3. Hide Shorts carousels (Search, Sidebar, Channels)
-youtube.com##ytd-reel-shelf-renderer
-
-! 4. Hide individual Shorts in Search and Grid Views
+! --- 3. Hide Individual Scattered Shorts ---
+! Catches Shorts masquerading as regular videos
 youtube.com##ytd-video-renderer:has(a[href*="/shorts/"])
 youtube.com##ytd-grid-video-renderer:has(a[href*="/shorts/"])
 youtube.com##ytd-rich-item-renderer:has(a[href*="/shorts/"])
-
-! 5. Hide the Shorts tab on Channel pages
-youtube.com##tp-yt-paper-tab[aria-label="Shorts"]
-
-! 6. Hide Shorts in the right sidebar (Related videos)
 youtube.com##ytd-compact-video-renderer:has(a[href*="/shorts/"])
+
+! --- 4. Hide Search Results & Remixes ---
+! The new 2026 Search page layout
+www.youtube.com##ytd-search grid-shelf-view-model:has(a[href^="/shorts/"])
+! Hide short remixes
+www.youtube.com##ytd-reel-shelf-renderer:has(#title:has-text(/(^| )Shorts.?Remix.*$/i))
+
+! --- 5. Hide Tabs, Chips & Navigation ---
+www.youtube.com##ytd-guide-entry-renderer:has(yt-formatted-string:has-text(/^Shorts$/i))
+www.youtube.com##ytd-mini-guide-entry-renderer:has(.title:has-text(/^Shorts$/i))
+www.youtube.com##yt-chip-cloud-chip-renderer:has(*:has-text(/^Shorts$/i))
+www.youtube.com##yt-tab-shape:has-text(/^Shorts$/)
+
+! --- MOBILE (Algorithm Training) ---
+m.youtube.com##ytm-rich-item-renderer:has(#video-title:has-text(/(^| )#Shorts?( |$)/i))
+m.youtube.com##ytm-item-section-renderer:has(#video-title:has-text(/(^| )#Shorts?( |$)/i))
+m.youtube.com##ytm-pivot-bar-item-renderer:has(.pivot-shorts)
+m.youtube.com##ytm-video-with-context-renderer:has([data-style="SHORTS"])
+m.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytm-rich-section-renderer:has(.yt-core-attributed-string:has-text(/(^| )Shorts( |$)/i))
+m.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytm-reel-shelf-renderer.item:has(.reel-shelf-title-wrapper .yt-core-attributed-string:has-text(/(^| )Shorts( |$)/i))
+m.youtube.com##ytm-reel-shelf-renderer:has(.reel-shelf-title-wrapper .yt-core-attributed-string:has-text(/(^| )Shorts.?Remix.*$/i))
+m.youtube.com##ytm-chip-cloud-chip-renderer:has(.yt-core-attributed-string:has-text(/^Shorts$/i))
+m.youtube.com##ytm-reel-shelf-renderer:has(ytm-shorts-lockup-view-model)
+m.youtube.com##yt-tab-shape:has-text(/^Shorts$/)
