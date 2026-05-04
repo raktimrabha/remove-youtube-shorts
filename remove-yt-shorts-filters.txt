@@ -1,45 +1,51 @@
-! Title: Block YouTube Shorts
-! Description: AdGuard filters to completely remove YouTube Shorts from the desktop web interface.
-! Homepage: [https://github.com/raktimrabha/remove-youtube-shorts]
+! Title: Block YouTube Shorts (Updated May 2026)
+! Description: Comprehensive AdGuard/uBO filters to remove YouTube Shorts from desktop and mobile.
 
 ! --- 1. Layout & Grid Fixes ---
 ! Fix empty spaces left behind by blocked grids
-www.youtube.com##ytd-rich-grid-row,#contents.ytd-rich-grid-row:style(display: contents !important)
+www.youtube.com##ytd-rich-grid-row, #contents.ytd-rich-grid-row:style(display: contents !important)
 
-! --- 2. Hide Shelves & Sections (Updated for March 2026) ---
-! Hide dedicated Shorts shelves (using custom attribute)
+! --- 2. Hide Shelves & Sections ---
+! Catch elements strictly marked as shorts
 youtube.com##[is-shorts]
-! Hide Shorts sections everywhere except History
+youtube.com##:is(.ytAttributedStringHost,.yt-core-attributed-string):has-text(Shorts):upward(.ytd-item-section-renderer)
+! Hide Shorts sections everywhere except History (Desktop)
 www.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytd-rich-section-renderer:has(a[href^="/shorts/"])
-www.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytd-reel-shelf-renderer:has(a[href^="/shorts/"])
+www.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytd-reel-shelf-renderer
 
-! --- 3. Hide Individual Scattered Shorts ---
+! --- 3. Hide Individual Scattered Shorts (Desktop) ---
 ! Catches Shorts masquerading as regular videos
-youtube.com##ytd-video-renderer:has(a[href*="/shorts/"])
-youtube.com##ytd-grid-video-renderer:has(a[href*="/shorts/"])
-youtube.com##ytd-rich-item-renderer:has(a[href*="/shorts/"])
-youtube.com##ytd-compact-video-renderer:has(a[href*="/shorts/"])
+www.youtube.com##ytd-video-renderer:has(a[href^="/shorts/"])
+www.youtube.com##ytd-grid-video-renderer:has(a[href^="/shorts/"])
+www.youtube.com##ytd-rich-item-renderer:has(a[href^="/shorts/"])
+www.youtube.com##ytd-compact-video-renderer:has(a[href^="/shorts/"])
 
 ! --- 4. Hide Search Results & Remixes ---
-! The new 2026 Search page layout
+! The modern Search page layout & remixes
 www.youtube.com##ytd-search grid-shelf-view-model:has(a[href^="/shorts/"])
-! Hide short remixes
-www.youtube.com##ytd-reel-shelf-renderer:has(#title:has-text(/(^| )Shorts.?Remix.*$/i))
+www.youtube.com##ytd-reel-shelf-renderer:has(.yt-core-attributed-string:has-text(/(^| )Shorts.?Remix.*$/i))
 
-! --- 5. Hide Tabs, Chips & Navigation ---
+! --- 5. Hide Tabs, Chips & Navigation (Desktop) ---
+! Remove from sidebars and filter chips
+www.youtube.com###guide [title="Shorts"]
+www.youtube.com##.ytd-mini-guide-entry-renderer[title="Shorts"]
+www.youtube.com##ytd-mini-guide-entry-renderer[aria-label="Shorts"]
 www.youtube.com##ytd-guide-entry-renderer:has(yt-formatted-string:has-text(/^Shorts$/i))
-www.youtube.com##ytd-mini-guide-entry-renderer:has(.title:has-text(/^Shorts$/i))
 www.youtube.com##yt-chip-cloud-chip-renderer:has(*:has-text(/^Shorts$/i))
 www.youtube.com##yt-tab-shape:has-text(/^Shorts$/)
+www.youtube.com##tp-yt-paper-tab[aria-label="Shorts"]
 
-! --- MOBILE (Algorithm Training) ---
+! --- 6. Redirect Accidental Clicks (uBlock Origin Only) ---
+! Forces clicked Shorts to open in the normal video player
+||youtube.com/shorts/*$uritransform=/shorts\/(.*)/watch\?v=\$1/
+
+! --- 7. MOBILE (Algorithm Training & UI) ---
 m.youtube.com##ytm-rich-item-renderer:has(#video-title:has-text(/(^| )#Shorts?( |$)/i))
 m.youtube.com##ytm-item-section-renderer:has(#video-title:has-text(/(^| )#Shorts?( |$)/i))
 m.youtube.com##ytm-pivot-bar-item-renderer:has(.pivot-shorts)
 m.youtube.com##ytm-video-with-context-renderer:has([data-style="SHORTS"])
 m.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytm-rich-section-renderer:has(.yt-core-attributed-string:has-text(/(^| )Shorts( |$)/i))
-m.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytm-reel-shelf-renderer.item:has(.reel-shelf-title-wrapper .yt-core-attributed-string:has-text(/(^| )Shorts( |$)/i))
-m.youtube.com##ytm-reel-shelf-renderer:has(.reel-shelf-title-wrapper .yt-core-attributed-string:has-text(/(^| )Shorts.?Remix.*$/i))
+m.youtube.com##:matches-path(/^(?!\/feed\/history).*$/)ytm-reel-shelf-renderer
 m.youtube.com##ytm-chip-cloud-chip-renderer:has(.yt-core-attributed-string:has-text(/^Shorts$/i))
 m.youtube.com##ytm-reel-shelf-renderer:has(ytm-shorts-lockup-view-model)
 m.youtube.com##yt-tab-shape:has-text(/^Shorts$/)
