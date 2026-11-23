@@ -1,23 +1,28 @@
-# Block YouTube Shorts (AdGuard Filters)
+# Block YouTube Shorts (AdGuard & uBlock Origin)
 
-A continually updated list of AdGuard filters to completely remove YouTube Shorts from the desktop and mobile web interfaces. 
+A continually maintained filter list to remove YouTube Shorts across desktop (`www.youtube.com`) and mobile web (`m.youtube.com`) for **AdGuard** and **uBlock Origin**.
 
-YouTube frequently updates its site structure, breaking older Adblock rules. This repository provides updated selectors that catch the new layout, removing Shorts from the homepage, subscriptions, search, sidebar menus, and related videos.
+YouTube frequently changes its DOM structure, breaking older blockers. This list tracks the latest layout updates to hide Shorts from the homepage, subscriptions, search, watch sidebar, playlists, channel tabs, and navigation menus—while keeping your Watch History intact.
 
 ## ⚙️ How to Install
 
-### Option A: Subscribe to the list (Recommended)
-By subscribing, your AdGuard or uBlock Origin will automatically fetch any future updates.
-1. Open **AdGuard** (**Filters** > **Custom Filters**) or **uBlock Origin** (**Filter lists** > **Import**).
-2. Click the copy icon below and paste the raw filter list URL:
+### Option A: Subscribe to the List (Recommended)
+Subscribing lets your blocker automatically pull future updates whenever YouTube changes its layout.
+
+1. Open your blocker's custom filter lists:
+   - **AdGuard:** Settings → **Filters** → **Custom Filters** → **Add Custom Filter**
+   - **uBlock Origin:** Dashboard → **Filter lists** → scroll to **Custom** → check **Import**
+2. Copy and paste this URL, then click **Apply / Subscribe**:
 
 ```text
 https://raw.githubusercontent.com/raktimrabha/remove-youtube-shorts/main/remove-yt-shorts-filters.txt
 ```
 
 ### Option B: Quick Copy-Paste
-1. Open **AdGuard** (**User Rules**) or **uBlock Origin** (**My Filters**).
-2. Expand the block below, click the **Copy** icon in the top-right corner, paste it in, and click **Apply/Save**.
+1. Open your blocker's manual rules:
+   - **AdGuard:** Settings → **User Rules**
+   - **uBlock Origin:** Dashboard → **My Filters**
+2. Expand the block below, click the **Copy** icon in the top-right corner, paste it in, and click **Apply / Save**.
 
 <details>
 <summary><strong>Click to expand & copy the filters (Updated November 2026)</strong></summary>
@@ -90,14 +95,26 @@ m.youtube.com##yt-tab-shape:has-text(/^Shorts$/)
 
 </details>
 
-## 📱 A Quick Note on Mobile 
-While these filters are mainly for the YouTube desktop webpage, there is a great side effect: **If you use this blocker on your PC for a few days, YouTube's algorithm actually stops pushing Shorts to you as frequently on the mobile app, too!**
+## ✅ What Gets Blocked
 
-## 🛠 2026 Updates (Technical Details)
-* The new 2026 layout requires fixing empty spaces left behind by blocked grids using `:style(display: contents !important)`
-* Hiding Shorts dynamically everywhere except the History page requires `:matches-path` filters.
-* YouTube heavily relies on nested elements now, requiring AdGuard's extended CSS with `:has()` to force the blocker to check the specific Shorts link structure before hiding it.
-* Mobile-specific rules targeting `m.youtube.com` have been added to stop algorithm training completely on mobile browsers.
+| Area | Coverage |
+| :--- | :--- |
+| **Feeds & Shelves** | Home, Subscriptions, Channel pages, and Search Shorts shelves (including Remix shelves) |
+| **Individual Videos** | Scattered Shorts in feeds, Watch sidebar recommendations, and playlists |
+| **Navigation & UI** | Left sidebar & mini-guide links, filter chips, mobile bottom pivot bar, and channel Shorts tabs |
+| **Direct Links (uBO)** | Redirects `/shorts/<id>` clicks to the standard `/watch?v=<id>` player via `$uritransform` |
+| **Watch History** | Intentionally preserved (`/feed/history` is excluded from shelf hiding) |
+
+## 📱 A Quick Note on Mobile
+In addition to blocking Shorts on `m.youtube.com`, there is a helpful side effect: **using this filter on desktop for a few days reduces how often YouTube's algorithm pushes Shorts to you in the mobile app as well.**
+
+## 🛠 Technical Details (November 2026)
+- **Modern View-Models:** Targets YouTube's newer web components (`grid-shelf-view-model`, `yt-lockup-view-model`, `ytm-shorts-lockup-view-model`, `ytm-shorts-lockup-view-model-v2`, and `chip-bar-view-model`) alongside legacy renderers.
+- **No Broken Grid Gaps:** Applies `:style(display: contents !important)` to `ytd-rich-grid-row` so remaining videos reflow cleanly when Shorts are removed.
+- **History-Safe Path Matching:** Uses `:matches-path(/^(?!\/feed\/history).*$/)` so Watch History stays accessible.
+- **Low False Positives:** Matches structural Shorts attributes and `/shorts/` links instead of broad text matching that could hide regular videos with "Shorts" in the title.
 
 ## 🤝 Contributing
-If YouTube changes its layout again and you notice Shorts leaking through, please open an Issue or submit a Pull Request!
+If YouTube changes its layout and Shorts slip through, please open an Issue or submit a Pull Request with:
+- Where the Short appeared (e.g., Home, Search, Watch sidebar, Mobile)
+- Your blocker and browser (e.g., AdGuard / uBlock Origin)
