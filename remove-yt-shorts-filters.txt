@@ -1,7 +1,9 @@
-! Title: Block YouTube Shorts (Updated Nov 2026 v2)
+! Title: Block YouTube Shorts (Last Updated: November 2026 v3)
 ! Description: Comprehensive AdGuard/uBO filters to remove YouTube Shorts from desktop and mobile.
 ! Homepage: https://github.com/raktimrabha/remove-youtube-shorts
 ! Last modified: 2026-11-24
+! Version: 2026.11.24
+! Expires: 4 days
 
 ! --- 1. Layout & Grid Fixes ---
 ! Fix empty spaces left behind by blocked grids
